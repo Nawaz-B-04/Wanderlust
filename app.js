@@ -3,7 +3,7 @@ if (process.env.NODE_ENV != "production") {
 }
 
 console.log(process.env.SESSION_SECRET);
-
+console.log("MAP_TOKEN: ", process.env.MAP_TOKEN);
 const express = require('express');
 const app = express();
 const mongoose = require("mongoose")
@@ -13,8 +13,7 @@ const methodOverride = require("method-override")
 
 // let MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 const dbUrl = process.env.ATLAS_DB;
-const MapboxClient = require('@mapbox/mapbox-sdk');
-const mapboxClient = new MapboxClient({ accessToken: process.env.MAP_TOKEN });
+
 
 const ejsMate = require("ejs-mate");
 const ExpressErrors = require("./utils/ExpressErrors.js")
@@ -46,12 +45,12 @@ app.use(express.static(path.join(__dirname, "/public")))
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     crypto: {
-        secret: process.env.SECRET
+        secret: process.env.SESSION_SECRET
     },
     touchAfter: 24 * 3600
 })
 store.on("error", (err) => {
-    console.log("Error in MONGO Session Store0", err)
+    console.log("Error in MONGO Session Store", err)
 })
 
 const sessionOptions = {
@@ -110,7 +109,7 @@ app.use("/listings", listingRouter)
 app.use("/listings/:id/reviews", reviewsRouter)
 app.use("/", userRouter)
 
-console.log("MAP_TOKEN: ", process.env.MAP_TOKEN);
+
 
 
 

@@ -1,9 +1,9 @@
 <% layout("/layouts/boilerplate")-%>
 <script>
-  // Set the map token as a global variable
-  window.mapToken = "<%= process.env.MAP_TOKEN %>";
-  const listings = <%- JSON.stringify(listing) %>;
-</script>
+  let mapToken = "<%= process.env.MAP_TOKEN %>";
+      let listing =  <%- JSON.stringify(listing )%>;
+   
+  </script>
 
 
 
