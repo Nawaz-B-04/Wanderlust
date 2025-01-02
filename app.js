@@ -2,7 +2,7 @@ if (process.env.NODE_ENV != "production") {
     require('dotenv').config();
 }
 
-console.log(process.env.SECRET);
+console.log(process.env.SESSION_SECRET);
 
 const express = require('express');
 const app = express();
@@ -13,7 +13,8 @@ const methodOverride = require("method-override")
 
 // let MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 const dbUrl = process.env.ATLAS_DB;
-
+const MapboxClient = require('@mapbox/mapbox-sdk');
+const mapboxClient = new MapboxClient({ accessToken: process.env.MAP_TOKEN });
 
 const ejsMate = require("ejs-mate");
 const ExpressErrors = require("./utils/ExpressErrors.js")
@@ -49,7 +50,7 @@ const store = MongoStore.create({
     },
     touchAfter: 24 * 3600
 })
-store.on("error", () => {
+store.on("error", (err) => {
     console.log("Error in MONGO Session Store0", err)
 })
 
