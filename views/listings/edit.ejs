@@ -1,0 +1,64 @@
+<% layout("/layouts/boilerplate")-%>
+<div class="row mt-3">
+    <div class="col-8 offset-2">
+
+<h2>Edit Your Listing</h2>
+    <form method="POST" action="/listings/<%=listing._id%>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" name="listing[title]" value="<%=listing.title%>" required>
+            <div class="invalid-feedback">Oops! you did not enter valid input
+            </div>  
+            <div class="valid-feedback">Looks Perfect!
+            </div> 
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label"></label>
+            <input type="text" class="form-control" name="listing[description]" value="<%=listing.description%>" required>
+            <div class="invalid-feedback">Oops! you did not enter valid input
+            </div>  
+            <div class="valid-feedback">Looks Perfect!
+            </div> 
+        </div>
+        <div class="row">
+            <div class="mb-3 col-4">
+                <label for="price" class="form-label"></label>
+                <input type="number" class="form-control" name="listing[price]" value="<%=listing.price%>" required>
+                <div class="invalid-feedback">Oops! you did not enter valid input
+                </div>
+                <div class="valid-feedback">Looks Perfect!
+                </div>   
+            </div>
+            <div class="mb-3 col-8">
+                <label for="country" class="form-label"></label>
+                <input type="text" class="form-control" name="listing[country]" value="<%=listing.country%>" required>
+                <div class="invalid-feedback">Oops! you did not enter valid input
+                </div>  
+            </div>
+            <div class="valid-feedback">Looks Perfect!
+            </div> 
+        </div>
+        <div class="mb-3 card col-4">
+            Original Image 
+            <img src="<%=listing.image.url%>" alt="Original Image">
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Upload new image</label>
+            <input type="file" class="form-control" name="listing[image][url]">
+        </div>
+
+        <div class="mb-3">
+            <label for="location" class="form-label"></label>
+            <input type="text" class="form-control" name="listing[location]" value="<%=listing.location%>" required>
+            <div class="invalid-feedback">Oops! you did not enter valid input
+            </div>  
+            <div class="valid-feedback">Looks Perfect!
+            </div>  
+        </div>
+        <button class="btn btn-dark edit-btn mt-3">Add</button>
+     
+    </form>
+</div>
+</div>
+<script src="/js/script.js"></script>
