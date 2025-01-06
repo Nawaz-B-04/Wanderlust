@@ -2,7 +2,7 @@ if (process.env.NODE_ENV != "production") {
     require('dotenv').config();
 }
 
-console.log(process.env.SESSION_SECRET);
+console.log(process.env.SECRET);
 console.log("MAP_TOKEN: ", process.env.MAP_TOKEN);
 const express = require('express');
 const app = express();
@@ -43,9 +43,9 @@ app.use(express.static(path.join(__dirname, "/public")))
 
 
 const store = MongoStore.create({
-    mongoUrl: dbUrl,
+     mongoUrl: dbUrl,
     crypto: {
-        secret: process.env.SESSION_SECRET
+        secret: process.env.SECRET
     },
     touchAfter: 24 * 3600
 })
@@ -55,7 +55,7 @@ store.on("error", (err) => {
 
 const sessionOptions = {
     store,
-    secret: process.env.SESSION_SECRET || "mysecretcode",
+    secret: process.env.SECRET || "mysecretcode",
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -75,11 +75,16 @@ passport.serializeUser(User.serializeUser())   //store users info in session
 passport.deserializeUser(User.deserializeUser())
 //remove users info from session
 app.use((req, res, next) => {
-    res.locals.success = req.flash("success")
-    res.locals.error = req.flash("error")
-    res.locals.currUser = req.user
-    next()
-})
+    console.log('Current User:', req.user); // Debugging line
+
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    res.locals.currUser = req.user || null; // Set currUser to null if undefined
+    console.log('res.locals.currUser:', res.locals.currUser); // Debug log
+    next();
+});
+
+
 
 // app.get("/demouser",async (req,res)=>{
 //     let fakeUser = new User({
