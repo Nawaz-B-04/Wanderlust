@@ -1,9 +1,12 @@
 <% layout("/layouts/boilerplate")-%>
 <script>
   let mapToken = "<%= process.env.MAP_TOKEN %>";
-      let listing =  <%- JSON.stringify(listing)%>;
-   
-  </script>
+  let listing = <%- JSON.stringify(listing) %>; 
+  
+  // This way, `listing` will be available in your script
+  console.log(listing);  // You can check the listing data here to ensure it's correctly passed
+</script>
+
 
 
 

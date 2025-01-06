@@ -4,8 +4,13 @@ const Listing = require("../models/listing")
 
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken = process.env.MAP_TOKEN;
-const geocodingClient = mbxGeocoding({ accessToken: mapToken});
+console.log("Map Token Used:", mapToken); // Ensure this prints the token correctly
 
+if (!mapToken) {
+    throw new Error("Mapbox token is undefined.");
+}
+
+const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 
 module.exports.index = async (req, res) => {
@@ -15,28 +20,43 @@ module.exports.index = async (req, res) => {
 module.exports.renderNewForm = (req, res) => {
     res.render("listings/new.ejs")
 }
+// module.exports.showListing = async (req, res) => {
+//     let { id } = req.params;
+
+//     const listing = await Listing.findById(id).populate({
+//         path: "reviews",
+//         populate: {
+//             path: "author",
+//         },
+//     }).populate("owner");
+//     if (!listing) {
+//         req.flash("error", "Listing you requested for does not exist");
+//         return res.redirect("/listings");
+//     }
+//     console.log("Listing Data:", listing);  // Debugging the data passed to the EJS
+//     res.render("listings/show.ejs", { listing, })
+// }
 module.exports.showListing = async (req, res) => {
     let { id } = req.params;
 
-    const listing = await Listing.findById(id)
-        .populate({
-            path: "reviews",
-            populate: {
-                path: "author",
-            },
-        })
-        .populate("owner");
+    const listing = await Listing.findById(id).populate({
+        path: "reviews",
+        populate: {
+            path: "author",
+        },
+    }).populate("owner");
 
     if (!listing) {
         req.flash("error", "Listing you requested for does not exist");
         return res.redirect("/listings");
     }
 
-    res.render("listings/show.ejs", {
-        listing,
-        mapToken, // Pass Mapbox token to template
-    });
+    console.log("Listing Data:", listing);  // Debugging the data passed to the EJS
+
+    // Pass the mapToken along with the listing data
+    res.render("listings/show.ejs", { listing, mapToken: process.env.MAP_TOKEN });
 };
+
 
 
 module.exports.createRoute = async (req, res, next) => {
